@@ -1,4 +1,4 @@
-from check_db import get_desc_by_key, get_diagnose_detail
+from check_db import get_desc_by_key
 
 diagnose = "Острый бронхит"
 section = "Этиология и патогенез"
@@ -17,6 +17,3 @@ def get_titles_from_sections(sections: List[Dict]) -> List[str]:
 
 
 print(get_titles_from_sections(ls))
-
-
-# print(get_diagnose_detail(ls, section))

@@ -3,17 +3,16 @@ from fastapi import FastAPI, Query
 from check_db import get_desc_by_key, get_diagnose_detail
 from extract_diagnoses import collect_diagnoses_from_file
 from init_db import init_db
+from llm_query import llm_query
 from test import get_titles_from_sections
+import uvicorn
 
 app = FastAPI()
-
-# Пример списка диагнозов для демонстрации
 DIAGNOSES_DB = collect_diagnoses_from_file("diagnoses.json")
 
 
 @app.get("/diagnoses/similar")
 async def get_similar_diagnoses(diagnosis: str = Query(..., description="Название диагноза для поиска похожих")):
-    # Заглушка: возвращаем диагнозы, в которых есть подстрока diagnosis (без учета регистра)
     collection = init_db()
 
     result = collection.query(
@@ -21,8 +20,6 @@ async def get_similar_diagnoses(diagnosis: str = Query(..., description="Наз�
         n_results=5,  # количество похожих результатов
         include=["documents", "distances"]  # что вернуть в ответе
     )
-
-    # similar = format_response(result)
     similar = result
 
     return {"diagnoses": similar["documents"]}
@@ -39,10 +36,9 @@ async def get_sections(diagnosis: str = Query(..., description="Название
 async def get_section_content(diagnosis: str, sectionName: str):
     sections = get_desc_by_key(diagnosis)
     content = get_diagnose_detail(sections, sectionName)
-    return {"content": content}
+    result = llm_query(content)
+    return {"content": result}
 
-
-import uvicorn
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)

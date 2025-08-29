@@ -40,11 +40,11 @@ def get_elements_by_diagnosis(data: Any, diagnosis_name: str) -> Optional[List]:
 
     return search(data)
 
+
 def get_diagnose_detail(sections: List[Dict], title: str) -> Optional[str]:
     title_lower = title.strip().lower()
     for section in sections:
         if section.get("title", "").strip().lower() == title_lower:
-            print(section.get("content"))
             return section.get("content")
     return None
 
@@ -56,7 +56,6 @@ def get_desc_by_key(request):
         data = json.load(f)
 
     elements = get_elements_by_diagnosis(data, request)
-    print(elements)
     return elements
 
 

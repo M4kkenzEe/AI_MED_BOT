@@ -4,7 +4,7 @@ from check_db import get_desc_by_key, get_diagnose_detail
 from extract_diagnoses import collect_diagnoses_from_file
 from init_db import init_db
 from llm_query import llm_query
-from test import get_titles_from_sections
+from titles_from_section import get_titles_from_sections
 import uvicorn
 
 app = FastAPI()
@@ -17,12 +17,12 @@ async def get_similar_diagnoses(diagnosis: str = Query(..., description="Наз�
 
     result = collection.query(
         query_texts=[diagnosis],
-        n_results=5,  # количество похожих результатов
-        include=["documents", "distances"]  # что вернуть в ответе
+        n_results=5,
+        include=["documents", "distances"]
     )
     similar = result
 
-    return {"diagnoses": similar["documents"]}
+    return {"diagnoses": similar["documents"][0]}
 
 
 @app.get("/diagnoses/sections")

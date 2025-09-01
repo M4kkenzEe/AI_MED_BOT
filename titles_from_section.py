@@ -1,10 +1,3 @@
-from check_db import get_desc_by_key
-
-diagnose = "Острый бронхит"
-section = "Этиология и патогенез"
-
-ls = get_desc_by_key(diagnose)
-
 from typing import List, Dict
 
 def get_titles_from_sections(sections: List[Dict]) -> List[str]:
@@ -16,4 +9,3 @@ def get_titles_from_sections(sections: List[Dict]) -> List[str]:
     return [section.get("title", "") for section in sections]
 
 
-print(get_titles_from_sections(ls))

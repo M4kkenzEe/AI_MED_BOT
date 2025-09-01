@@ -25,8 +25,8 @@ async def get_similar_diagnoses(diagnosis: str = Query(..., description="Наз�
     return {"diagnoses": similar["documents"][0]}
 
 
-@app.get("/diagnoses/sections")
-async def get_sections(diagnosis: str = Query(..., description="Название диагноза для получения разделов")):
+@app.get("/diagnoses/{diagnosis}/sections")
+async def get_sections(diagnosis: str):
     section_list = get_desc_by_key(diagnosis.strip())
     result = get_titles_from_sections(section_list)
     return {"sections": result}

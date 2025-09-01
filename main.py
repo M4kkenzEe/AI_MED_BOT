@@ -13,7 +13,6 @@ DIAGNOSES_DB = collect_diagnoses_from_file("diagnoses.json")
 @app.get("/diagnoses/similar")
 async def get_similar_diagnoses(diagnosis: str = Query(..., description="Название диагноза для поиска похожих")):
     result = llm_query_choose_diagnosis(diagnosis)
-
     return {"diagnoses": result}
 
 

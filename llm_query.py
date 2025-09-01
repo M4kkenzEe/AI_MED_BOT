@@ -9,7 +9,6 @@ from extract_diagnoses import collect_diagnoses_from_file
 def llm_query(context: str) -> str:
     load_dotenv()
     client = OpenAI(
-        # This is the default and can be omitted
         api_key=os.environ.get("OPENAI_API_KEY"),
     )
 
@@ -31,7 +30,6 @@ def llm_query_choose_diagnosis(context: str) -> list[str]:
     load_dotenv()
     diagnosis_list = collect_diagnoses_from_file()
     client = OpenAI(
-        # This is the default and can be omitted
         api_key=os.environ.get("OPENAI_API_KEY"),
     )
 
@@ -51,6 +49,3 @@ def llm_query_choose_diagnosis(context: str) -> list[str]:
         """,
     )
     return response.output_text.split(", ")
-
-
-print(llm_query_choose_diagnosis("Анемия"))

@@ -5,13 +5,12 @@ from openai import OpenAI
 
 from extract_diagnoses import collect_diagnoses_from_file
 
+load_dotenv()
+
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"), )
+
 
 def llm_query(context: str) -> str:
-    load_dotenv()
-    client = OpenAI(
-        api_key=os.environ.get("OPENAI_API_KEY"),
-    )
-
     response = client.responses.create(
         model="gpt-4o",
         instructions=f"""Ты медик с 20-летним стажем.
@@ -27,12 +26,7 @@ def llm_query(context: str) -> str:
 
 
 def llm_query_choose_diagnosis(context: str) -> list[str]:
-    load_dotenv()
     diagnosis_list = collect_diagnoses_from_file()
-    client = OpenAI(
-        api_key=os.environ.get("OPENAI_API_KEY"),
-    )
-
     response = client.responses.create(
         model="gpt-4o",
         instructions=f"""Ты медик с 20-летним стажем.
@@ -49,3 +43,24 @@ def llm_query_choose_diagnosis(context: str) -> list[str]:
         """,
     )
     return response.output_text.split(", ")
+
+
+async def llm_query2(prompt: str) -> str:
+    response = client.responses.create(
+        model="gpt-4o",
+        instructions=f"""Веди себя как профессиональный педиатр с опытом работы 20 лет""",
+        input=prompt,
+    )
+    return response.output_text
+
+
+async def llm_query1(context: str, context_string) -> str:
+    response = client.responses.create(
+        model="gpt-4o",
+        instructions=f"""Веди себя как профессиональный педиатр с опытом работы 20 лет""",
+        input=f""" 
+        вот документ с медицинским отчетом о пациенте {context_string}.
+        Задание: {context}
+        """,
+    )
+    return response.output_text

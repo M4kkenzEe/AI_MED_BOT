@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 
 from check_db import get_desc_by_key, get_diagnose_detail
 from extract_diagnoses import collect_diagnoses_from_file
-from llm_query import llm_query_choose_diagnosis
+from llm_query import llm_query_choose_diagnosis, llm_query
 from tasks11_15 import *
 from tasks5_10 import tasks5_10
 from titles_from_section import get_titles_from_sections

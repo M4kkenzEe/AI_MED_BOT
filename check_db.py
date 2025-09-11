@@ -49,7 +49,6 @@ def get_diagnose_detail(sections: List[Dict], title: str) -> Optional[str]:
     return None
 
 
-# Пример использования:
 def get_desc_by_key(request):
     # Загружаем JSON из файла
     with open("diagnoses.json", "r", encoding="utf-8") as f:

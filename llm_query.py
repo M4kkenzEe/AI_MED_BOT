@@ -11,6 +11,7 @@ client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"), )
 
 
 def llm_query(context: str) -> str:
+    print(f"context: {context}")
     response = client.responses.create(
         model="gpt-4o",
         instructions=f"""Ты медик с 20-летним стажем.

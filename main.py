@@ -19,14 +19,14 @@ async def get_similar_diagnoses(diagnosis: str = Query(..., description="Наз�
     return {"diagnoses": result}
 
 
-@app.get("/diagnoses/{diagnosis}/sections")
+@app.get("/diagnoses/{diagnosis:path}/sections")
 async def get_sections(diagnosis: str):
     section_list = get_desc_by_key(diagnosis.strip())
     result = get_titles_from_sections(section_list)
     return {"sections": result}
 
 
-@app.get("/diagnoses/{diagnosis}/sections/{sectionName}")
+@app.get("/diagnoses/{diagnosis:path}/sections/{sectionName:path}")
 async def get_section_content(diagnosis: str, sectionName: str):
     sections = get_desc_by_key(diagnosis)
     content = get_diagnose_detail(sections, sectionName)

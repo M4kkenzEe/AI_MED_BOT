@@ -11,14 +11,10 @@ client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"), )
 
 
 def llm_query(context: str) -> str:
-    print(f"context: {context}")
     response = client.responses.create(
-        model="gpt-4o",
+        model="gpt-4.1",
         instructions=f"""
 Ты медик с 20-летним стажем.
-Если текст клинической рекомендации пустой или содержит малоинформативные заглушки (например, "→ По рекомендациям Ассоциации ревматологов России", "+", "content": "..."), выдай четкий и вежливый ответ вида: "Информация отсутствует или недостаточно полная для обработки".
-Если текст слишком большой для обработки, выдай сообщение: "Текст слишком большой, пожалуйста, сократи его для анализа".
-В противном случае:
  - Распиши выдержку более понятно (раскрой аббревиатуры, сделай язык доступнее для неспециалиста);
  - Не используй вступительные фразы, сразу переходи к сути;
  - Сократи текст без потери смысла.
@@ -57,7 +53,7 @@ def llm_query_choose_diagnosis(context: str) -> list[str]:
 
 async def llm_query2(prompt: str) -> str:
     response = client.responses.create(
-        model="gpt-4o",
+        model="gpt-4.1",
         instructions=f"""Веди себя как профессиональный педиатр с опытом работы 20 лет""",
         input=prompt,
     )
@@ -66,7 +62,7 @@ async def llm_query2(prompt: str) -> str:
 
 async def llm_query1(context: str, context_string) -> str:
     response = client.responses.create(
-        model="gpt-4o",
+        model="gpt-4.1",
         instructions=f"""Веди себя как профессиональный педиатр с опытом работы 20 лет""",
         input=f""" 
         вот документ с медицинским отчетом о пациенте {context_string}.

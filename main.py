@@ -9,6 +9,8 @@ from tasks11_15 import *
 from tasks5_10 import tasks5_10
 from titles_from_section import get_titles_from_sections
 
+# http://doctor-bot.aistlab.ru
+
 app = FastAPI()
 DIAGNOSES_DB = collect_diagnoses_from_file("diagnoses.json")
 

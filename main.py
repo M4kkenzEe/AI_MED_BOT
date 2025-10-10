@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI, Query
 
-from check_db import get_desc_by_key, get_diagnose_detail
+from diagnose_repository import get_desc_by_key, get_diagnose_detail
 from extract_diagnoses import collect_diagnoses_from_file
 from llm_query import llm_query_choose_diagnosis, llm_query
 from titles_from_section import get_titles_from_sections

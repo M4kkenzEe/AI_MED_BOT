@@ -10,22 +10,38 @@ load_dotenv()
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"), )
 
 
+def truncate_after_last_newline(text: str) -> str:
+    last_newline_pos = text.rfind('\n')
+    if last_newline_pos != -1:
+        return text[:last_newline_pos]
+    return text
+
+
 def llm_query(context: str) -> str:
     response = client.responses.create(
         model="gpt-4.1",
         instructions=f"""
 Ты медик с 20-летним стажем.
- - Распиши выдержку более понятно, раскрывая аббревиатуры и делая текст доступнее.
-- Сократи текст, сохраняя смысл.
-- Ограничь длину ответа 3000 символами.
-- Не пиши вступительных фраз, сразу переходи к сути.
-- Не пиши заключительных фраз
-Если ответ получается длиннее 3000 символов, сократи его до этого лимита.
-Отвечай только содержательным текстом.
+- Не используй Markdown разметку и прочие служебные символы, кроме знаков препинания.
+- Упрости и сократи текст, раскрывая аббревиатуры.
+- Если исходный текст очень длинный, выдели ТОЛЬКО самое важное и ключевые моменты.
+- Пиши кратко, по существу, без воды.
+- Расскажи информацию так, будто перед тобой сидит пациент, который должен понять информацию без трудностей
+- Без вступительных и заключительных фраз.
+- Сразу переходи к сути.
+- ЖЕСТКО ОГРАНИЧЬ ответ до 2800 символов (примерно 900 токенов).
+- Если ответ получается длиннее, сократи ещё раз до нужного размера.
         """,
         input=f""" Ниже выдержка из клинической рекомендации РФ по диагнозу {context} """,
+        temperature=0.8,
     )
-    return response.output_text
+    result = response.output_text
+
+    # Дополнительная гарантированная обрезка до 2800 символов
+    if len(result) > 2800:
+        result = truncate_after_last_newline(result[:2800])
+
+    return result
 
 
 def llm_query_choose_diagnosis(context: str) -> list[str]:
@@ -53,24 +69,3 @@ def llm_query_choose_diagnosis(context: str) -> list[str]:
         temperature=0.1,
     )
     return response.output_text.split(",")
-
-
-async def llm_query2(prompt: str) -> str:
-    response = client.responses.create(
-        model="gpt-4.1",
-        instructions=f"""Веди себя как профессиональный педиатр с опытом работы 20 лет""",
-        input=prompt,
-    )
-    return response.output_text
-
-
-async def llm_query1(context: str, context_string) -> str:
-    response = client.responses.create(
-        model="gpt-4.1",
-        instructions=f"""Веди себя как профессиональный педиатр с опытом работы 20 лет""",
-        input=f""" 
-        вот документ с медицинским отчетом о пациенте {context_string}.
-        Задание: {context}
-        """,
-    )
-    return response.output_text
